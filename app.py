@@ -5,7 +5,7 @@ st.title("Calculadora de V de Aiken")
 st.write("Esta aplicación calcula la V de Aiken para dos criterios: relevancia y redacción.")
 
 n_validadores = st.number_input("Número de validadores", min_value=1, step=1)
-n_items = st.number_input("Número de ítems o preguntas", min_value=1, step=1)
+n_items = st.number_input("Número de ítems", min_value=1, step=1)
 
 resultados = []
 
