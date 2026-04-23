@@ -7,8 +7,6 @@ st.write("Esta aplicación calcula la V de Aiken para dos criterios: relevancia 
 n_validadores = st.number_input("Número de validadores", min_value=1, step=1)
 n_items = st.number_input("Número de ítems", min_value=1, step=1)
 
-resultados = []
-
 for item in range(1, int(n_items) + 1):
     st.subheader(f"Ítem {item}")
 
@@ -50,3 +48,17 @@ for item in range(1, int(n_items) + 1):
 
         st.write(f"Promedio en redacción: {promedio_redaccion:.2f}")
         st.write(f"V de Aiken en redacción: {v_redaccion:.2f}")
+
+        st.subheader("Decisión del ítem")
+
+        if v_relevancia >= 0.7 and v_redaccion >= 0.7:
+            st.success("Ítem VALIDADO ✅ Cumple en relevancia y redacción.")
+
+        elif v_relevancia >= 0.7 and v_redaccion < 0.7:
+            st.warning("Ítem PARCIALMENTE VÁLIDO ⚠️ Cumple en relevancia, pero debe mejorarse la redacción.")
+
+        elif v_relevancia < 0.7 and v_redaccion >= 0.7:
+            st.warning("Ítem PARCIALMENTE VÁLIDO ⚠️ Cumple en redacción, pero debe mejorarse la relevancia.")
+
+        else:
+            st.error("Ítem NO VALIDADO ❌ No cumple ni en relevancia ni en redacción.")
