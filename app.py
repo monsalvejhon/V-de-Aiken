@@ -2,34 +2,51 @@ import streamlit as st
 
 st.title("Calculadora de V de Aiken")
 
-st.write("Ingrese las valoraciones de los evaluadores en una escala de 1 a 5.")
+st.write("Esta aplicación calcula la V de Aiken para dos criterios: relevancia y redacción.")
 
-n = st.number_input("Número de evaluadores", min_value=1, step=1)
+n_validadores = st.number_input("Número de validadores", min_value=1, step=1)
+n_items = st.number_input("Número de ítems o preguntas", min_value=1, step=1)
 
-valores = []
+resultados = []
 
-for i in range(int(n)):
-    r = st.number_input(
-        f"Valoración del evaluador {i+1}",
-        min_value=1,
-        max_value=5,
-        step=1,
-        key=f"eval_{i}"
-    )
-    valores.append(r)
+for item in range(1, int(n_items) + 1):
+    st.subheader(f"Ítem {item}")
 
-if st.button("Calcular V de Aiken"):
-    X = sum(valores) / n
-    k = 4
-    V = (X - 1) / k
+    relevancia = []
+    redaccion = []
 
-    st.subheader("Resultado")
-    st.write(f"Promedio de evaluaciones: {X:.2f}")
-    st.write(f"V de Aiken: {V:.2f}")
+    for validador in range(1, int(n_validadores) + 1):
+        col1, col2 = st.columns(2)
 
-    if V >= 0.80:
-        st.success("El ítem presenta una validez de contenido alta.")
-    elif V >= 0.70:
-        st.warning("El ítem presenta una validez aceptable, pero conviene revisarlo.")
-    else:
-        st.error("El ítem presenta una validez baja y requiere ajustes.")
+        with col1:
+            r = st.number_input(
+                f"Relevancia - Validador {validador} - Ítem {item}",
+                min_value=1,
+                max_value=5,
+                step=1,
+                key=f"rel_{item}_{validador}"
+            )
+            relevancia.append(r)
+
+        with col2:
+            d = st.number_input(
+                f"Redacción - Validador {validador} - Ítem {item}",
+                min_value=1,
+                max_value=5,
+                step=1,
+                key=f"red_{item}_{validador}"
+            )
+            redaccion.append(d)
+
+    if st.button(f"Calcular ítem {item}"):
+        promedio_relevancia = sum(relevancia) / n_validadores
+        promedio_redaccion = sum(redaccion) / n_validadores
+
+        v_relevancia = (promedio_relevancia - 1) / 4
+        v_redaccion = (promedio_redaccion - 1) / 4
+
+        st.write(f"Promedio en relevancia: {promedio_relevancia:.2f}")
+        st.write(f"V de Aiken en relevancia: {v_relevancia:.2f}")
+
+        st.write(f"Promedio en redacción: {promedio_redaccion:.2f}")
+        st.write(f"V de Aiken en redacción: {v_redaccion:.2f}")
